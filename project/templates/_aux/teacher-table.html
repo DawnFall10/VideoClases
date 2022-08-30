@@ -1,0 +1,11 @@
+{% load static %}
+<script>
+    $(document).ready(function() {
+        $('#example').dataTable( {
+            "order": [[ 3, "asc" ]],
+            "language": {
+                url: "{% static "assets/i18n_datatable_spanish.json" %}"
+            }
+        });
+    });
+</script>

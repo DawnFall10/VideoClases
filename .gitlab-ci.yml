@@ -1,0 +1,16 @@
+test:
+  image: python:3.6
+  script:
+  # this configures Django application to use attached postgres database that is run on `postgres` host
+  #- export DATABASE_URL=postgres://postgres:@postgres:5432/python-test-app
+  - pip3 install -r requirements.txt
+  - cp project/settings_secret.py.template project/settings_secret.py
+  - python manage.py collectstatic --no-input
+  - mkdir site_media/media
+  - cp project/static/test/* site_media/media
+  - coverage run manage.py test
+  - coverage report
+  coverage: '/TOTAL.+ ([0-9]{1,3}%)/'
+  only:
+  - master
+  - develop

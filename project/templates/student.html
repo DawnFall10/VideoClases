@@ -1,0 +1,92 @@
+﻿{% extends 'base.html' %}
+{% load static %}
+
+{% block teacher-active %}class="menu-top-active"{% endblock %}
+
+{% block body-header-title %}Tareas{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-xs-12">
+            <table id="example" class="table table-responsive table-bordered" cellspacing="0" width="100%">
+                <thead>
+                <tr>
+                    <th>Tarea</th>
+                    <th>Respuestas correct <br>
+                        en otras VideoClases</th>
+                    <th>Respuestas correct <br>
+                        de otros en su VideoClase</th>
+                    <th>Nota</th>
+                    <th>VideoClases vistas ****</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for group in groups %}
+                    <tr>
+                        <td>{{ group.homework.title }}</td>
+                        <td>
+                            {% for a in group.videoclase.members_and_answers %}
+                                {% if a.user_id == user.student.user.id %}
+                                    {{ a.sum_correct }} / {{ a.sum_correct|add:a.sum_wrong }}
+                                {% endif %}
+                            {% endfor %}
+                        </td>
+                        <td>
+                            {% with group.videoclase.others_answers as r %}
+                                {{ r.correct }} / {{ r.correct|add:r.wrong }}
+                            {% endwith %}
+                        </td>
+                        <td>{% if group.nota_final > 0 %}{{ group.nota_final }}{% endif %}</td>
+                        <td>{{ group.videoclases_evaluadas }}</td>
+                        {% if not group.pq_answer and group.homework.pedagogicalquestions and group.homework.pedagogicalquestions.get_state != 4 %}
+                            <td>
+                                <button onclick="location.href = '{% url 'evaluate_pedagogical_questions' group.homework.id %}';" class="btn btn-info">Contestar Test</button>
+                            </td>
+                        {% elif group.homework.get_estado == 1 %}
+                            {% if group.videoclase.upload_students %}
+                                <td>
+                                    <button onclick="location.href = '{% url 'send_videoclase' group.homework.id %}';"
+                                            class="btn btn-warning">Editar
+                                    </button>
+                                </td>
+                            {% else %}
+                                <td>
+                                    <button onclick="location.href = '{% url 'send_videoclase' group.homework.id %}';"
+                                            class="btn btn-info">Enviar
+                                    </button>
+                                </td>
+                            {% endif %}
+                        {% elif group.homework.get_estado == 2 %}
+                            {% if group.videoclase.upload_students %}
+                                <td>
+                                    <button onclick="location.href = '{% url 'review_videoclase' group.homework.id %}';"
+                                            class="btn btn-info">Evaluar
+                                    </button>
+                                </td>
+                            {% else %}
+                                <td>
+                                    <button onclick="location.href = '{% url 'send_videoclase' group.homework.id %}';"
+                                            class="btn btn-info">Enviar
+                                    </button>
+                                </td>
+                            {% endif %}
+                        {% else %}
+                            <td>
+                                <button onclick="location.href = '{% url 'watch_videoclase' group.homework.id %}';"
+                                        class="btn btn-info">Ver
+                                </button>
+                            </td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        <div><strong>**** NOTA:</strong> La diferencia entre Videos vistos y respondidos puede corresponder a evaluaciones de control que aparecen de manera aleatoria</div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra-script %}
+    {% include 'aux/student-table-translation-es.html' %}
+{% endblock %}

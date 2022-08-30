@@ -1,0 +1,16 @@
+[run]
+source = 
+    videoclases
+    quality_control
+ 
+[report]
+ignore_errors = True
+omit =
+    */tests/*
+    */tests.py
+    */migrations/*
+    site_media/*
+    fixtures/*
+    */__init__.py
+    */admin.py
+    */management/*
