@@ -57,28 +57,12 @@
                     {% if user.is_authenticated %}
                         <div align="right">
                             Bienvenido/a {{ user.get_full_name }}
-                            <br/><a href="{% url 'logout' %}">Cerrar sesión</a>
+                            <br/><a href="{% url 'logout_index' %}">Cerrar sesión</a>
                         </div>
                     {% else %}
                         {% crispy form %}
-                        <a style="color: white;" data-toggle="modal" data-target="#forgot_password" href="#">Olvidé mi
+                        <a style="color: white;" href="{% url 'password_reset' %}">Olvidé mi
                             clave</a>
-                        <div class="modal fade" id="forgot_password" tabindex="-1" role="dialog"
-                             aria-labelledby="forgot_passwordLabel" style="color:black">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                        <h4 class="modal-title" id="gridSystemModalLabel">Recuperar contraseña</h4>
-                                    </div>
-                                    <div class="modal-body">
-                                    <span>Pidele a tu profesor(a) que cambie tu contraseña, en caso de ser un profesor contacta a
-                                        <a href="mailto:software@teachingislearning.cl">software@teachingislearning.cl</a>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     {% endif %}
                 </div>
             </div>

@@ -101,6 +101,8 @@ CRISPY_TEMPLATE_PACK = "bootstrap3"
 
 INTERNAL_IPS = "127.0.0.1"
 
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 GRAPH_MODELS = {
     "all_applications": False,
     "group_models": True,

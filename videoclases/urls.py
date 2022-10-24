@@ -1,6 +1,6 @@
 from django.urls import path, re_path
 from django.contrib import admin
-
+from django.contrib.auth import views as auth_views
 import videoclases.views.homework as hw
 import videoclases.views.pegadogical_questions as pq
 import videoclases.views.views as vv
@@ -9,6 +9,11 @@ admin.autodiscover()
 
 urlpatterns = [
     path('', vv.IndexView.as_view(), name='index'),
+
+    path("password_reset", vv.password_reset_request, name="password_reset"),
+    path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(template_name='password_reset_done.html'), name='password_reset_done'),
+    path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(template_name="password_reset_confirm.html"), name='password_reset_confirm'),
+    path('reset/done/', auth_views.PasswordResetCompleteView.as_view(template_name='password_reset_complete.html'), name='password_reset_complete'), 
 
     path('student/evaluate-conceptual-test-form/<int:pk>/',
         pq.ResponsePedagogicalQuestion.as_view(),
@@ -46,7 +51,7 @@ urlpatterns = [
         name='login'),
     re_path(r'^logout/',
         vv.logout_view,
-        name='logout'),
+        name='logout_index'),
     re_path(r'^perfil/',
         vv.PerfilView.as_view(),
         name='perfil'),
