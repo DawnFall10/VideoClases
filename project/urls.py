@@ -8,7 +8,7 @@ admin.autodiscover()
 urlpatterns = [
                    re_path(r'^admin/', admin.site.urls),
                    re_path(r'^admin2/', admin_site.urls),
-                   re_path(r'^', include('videoclases.urls')),
+                   re_path('', include('videoclases.urls')),
                    re_path(r'^api/', include('quality_control.urls')),
                    #re_path('accounts/', include('django.contrib.auth.urls')),
             ]
