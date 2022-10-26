@@ -9,6 +9,7 @@ admin.autodiscover()
 
 urlpatterns = [
     path('', vv.IndexView.as_view(), name='index'),
+    path('organizer', vv.OrganizerView.as_view(), name='organizer'),
 
     path("password_reset", vv.password_reset_request, name="password_reset"),
     path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(template_name='password_reset_done.html'), name='password_reset_done'),

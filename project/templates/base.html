@@ -91,6 +91,10 @@
                                 <li><a {% block teacher-active %}{% endblock %}
                                         href="{% url 'teacher' %}">Profesor(a)</a></li>
                             {% endifusergroup %}
+                            {% ifusergroup Organizadores %}
+                                <li><a {% block organizer-active %}{% endblock %}
+                                        href="{% url 'organizer' %}">Organizador(a)</a></li>
+                            {% endifusergroup %}
                             {% if not user.is_anonymous %}
                                 <li><a {% block perfil-active %}{% endblock %} href="{% url 'perfil' %}"><img
                                         width="20px" height="20px" src="{% static "img/settings.png" %}"/></a></li>
@@ -130,8 +134,11 @@
                         {% ifusergroup Profesores %}
                             <h4>Profesor</h4>
                         {% endifusergroup %}
+                        {% ifusergroup Organizadores %}
+                            <h4>Organizador</h4>
+                        {% endifusergroup %}
                     </div>
-                    <div class="col-xs-10"><h5>{{ user.get_full_name }}</h5></div>
+                    <div class="col-xs-10"><h5>&nbsp;&nbsp;&nbsp;{{ user.get_full_name }}</h5></div>
                     <div class="clearfix"></div>
                     <div class="col-xs-2"><h4>Colegio</h4></div>
                     <div class="col-xs-10">
@@ -140,6 +147,9 @@
                         {% endifusergroup %}
                         {% ifusergroup Profesores %}
                             <h5>{{ user.teacher.school }}</h5>
+                        {% endifusergroup %}
+                        {% ifusergroup Organizadores %}
+                            <h5>{{ user.organizer.school }}</h5>
                         {% endifusergroup %}
                     </div>
                 </div>

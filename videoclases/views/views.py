@@ -63,6 +63,11 @@ def in_teachers_group(user):
         return user.groups.filter(name='Profesores').exists()
     return False
 
+def in_organizer_group(user):
+    if user:
+        return user.groups.filter(name='Organizadores').exists()
+    return False
+
 
 def password_reset_request(request):
 	if request.method == "POST":
@@ -1012,6 +1017,11 @@ class IndexView(FormView):
                 return reverse('student')
             else:
                 return reverse('change_password')
+        elif user.groups.filter(name='Organizadores').exists():
+            if user.organizer.changed_password:
+                return reverse('organizer')
+            else:
+                return reverse('change_password')
 
     def get(self, request, *args, **kwargs):
         return super(IndexView, self).get(request, *args, **kwargs)
@@ -1044,6 +1054,21 @@ class TeacherView(TemplateView):
     @method_decorator(user_passes_test(in_teachers_group, login_url='/'))
     def dispatch(self, *args, **kwargs):
         return super(TeacherView, self).dispatch(*args, **kwargs)
+
+class OrganizerView(TemplateView):
+    template_name = 'header.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(OrganizerView, self).get_context_data(**kwargs)
+        current_year = timezone.now().year
+        organizer = self.request.user.organizer
+        context['homeworks'] = Homework.objects.filter(organizer=organizer)
+        context['courses_without_homework'] = organizer.courses.filter(course_homework=None)
+        return context
+
+    @method_decorator(user_passes_test(in_organizer_group, login_url='/'))
+    def dispatch(self, *args, **kwargs):
+        return super(OrganizerView, self).dispatch(*args, **kwargs)
 
 
 class UploadScoreFormView(FormView):

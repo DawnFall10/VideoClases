@@ -81,7 +81,8 @@ ALLOWED_HOSTS = ["*"]
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_ROOT = os.path.join(BASE_DIR, "site_media" ,"static")
-STATIC_URL = "~gsilva/static/"
+STATIC_URL = "/static/"
+#STATIC_URL = "~gsilva/static/"
 STATICFILES_DIRS = [
     os.path.join(PACKAGE_ROOT, "static"),
 ]
@@ -101,7 +102,7 @@ CRISPY_TEMPLATE_PACK = "bootstrap3"
 
 INTERNAL_IPS = "127.0.0.1"
 
-FORCE_SCRIPT_NAME = '/~gsilva'
+#FORCE_SCRIPT_NAME = '/~gsilva'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 

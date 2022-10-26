@@ -9,6 +9,7 @@ from videoclases.models.course import Course
 from videoclases.models.evaluation.criteria_by_teacher import CriteriaByTeacher
 from videoclases.models.evaluation.scale import Scale
 from videoclases.models.teacher import Teacher
+from videoclases.models.organizer import Organizer
 
 
 class Homework(models.Model):
@@ -18,6 +19,7 @@ class Homework(models.Model):
         (u'Terminada', 3),
     )
 
+    organizer = models.ForeignKey(Organizer, blank=True, null=True, on_delete=models.CASCADE)
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, related_name='course_homework', on_delete=models.CASCADE)
     title = models.CharField(max_length=80)

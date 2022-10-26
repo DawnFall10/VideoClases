@@ -20,6 +20,7 @@ from videoclases.models.student import Student
 from videoclases.models.student_evaluations import StudentEvaluations
 from videoclases.models.student_responses import StudentResponses
 from videoclases.models.teacher import Teacher
+from videoclases.models.organizer import Organizer
 from videoclases.models.video_clase import VideoClase
 
 
@@ -34,6 +35,10 @@ class TeacherAdmin(admin.ModelAdmin):
     list_filter = ['courses', 'school']
     list_display = ('user', 'get_full_name', 'display_courses', 'changed_password')
 
+@admin.register(Organizer)
+class OrganizerAdmin(admin.ModelAdmin):
+    list_filter = ['courses', 'school']
+    list_display = ('user', 'get_full_name', 'display_courses', 'changed_password')
 
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
