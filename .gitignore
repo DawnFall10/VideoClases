@@ -72,3 +72,4 @@ teacher_evaluations/
 graphs/
 2022-07-16.json:Zone.Identifier
 project/settings.py
+EMAIL_BACKEND = 'django.core.mail.backen.py

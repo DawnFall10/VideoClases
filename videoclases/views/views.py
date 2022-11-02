@@ -513,6 +513,32 @@ class CourseView(TemplateView):
     def dispatch(self, *args, **kwargs):
         return super(CourseView, self).dispatch(*args, **kwargs)
 
+class CourseOrganizerView(TemplateView):
+    template_name = 'course_organizer.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(CourseOrganizerView, self).get_context_data(**kwargs)
+        course = Course.objects.get(id=kwargs['course_id'])
+        students = course.students.all()
+        students_array = []
+        for student in students:
+            student_dict = {}
+            student_dict['id'] = student.id
+            student_dict['last_name'] = student.user.last_name
+            student_dict['first_name'] = student.user.first_name
+            student_dict['username'] = student.user.username
+            student_dict['homeworks_entregadas'] = student.groupofstudents_set.exclude(videoclase__video__isnull=True) \
+                .exclude(videoclase__video__exact='').count()
+            student_dict['pending_homeworks'] = student.groupofstudents_set \
+                .filter(Q(videoclase__video='') | Q(videoclase__video__isnull=True)).count()
+            student_dict['videoclases_answered'] = StudentEvaluations.objects \
+                .filter(author=student) \
+                .filter(videoclase__group__homework__course=course).count()
+            students_array.append(student_dict)
+        context['students'] = students_array
+        context['course'] = course
+        return context
+
 
 @user_passes_test(in_teachers_group, login_url='/')
 def download_course(request, course_id):
@@ -1062,6 +1088,7 @@ class OrganizerView(TemplateView):
         context = super(OrganizerView, self).get_context_data(**kwargs)
         current_year = timezone.now().year
         organizer = self.request.user.organizer
+        context['schools'] = organizer.school.all()
         context['homeworks'] = Homework.objects.filter(organizer=organizer)
         context['courses_without_homework'] = organizer.courses.filter(course_homework=None)
         return context
@@ -1152,6 +1179,19 @@ class VideoclasesHomeworkView(TemplateView):
     @method_decorator(user_passes_test(in_teachers_group, login_url='/'))
     def dispatch(self, *args, **kwargs):
         return super(VideoclasesHomeworkView, self).dispatch(*args, **kwargs)
+
+
+class VideoclasesHomeworkOrganizerView(TemplateView):
+    template_name = 'videoclases_homework_organizer.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(VideoclasesHomeworkOrganizerView, self).get_context_data(**kwargs)
+        homework = get_object_or_404(Homework, id=self.kwargs['homework_id'])
+        context['groups'] = homework.groups.all()
+        context['homework'] = homework
+        return context
+
+
 
 
 def ui(request):

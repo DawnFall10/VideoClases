@@ -149,7 +149,11 @@
                             <h5>{{ user.teacher.school }}</h5>
                         {% endifusergroup %}
                         {% ifusergroup Organizadores %}
-                            <h5>{{ user.organizer.school }}</h5>
+                        <select name="schools" id="schools" multiple>
+                            {% for sc in user.organizer.school.all %}
+                            <option disabled value="{{sc}}">{{sc}}</option>
+                            {% endfor %}
+                          </select>
                         {% endifusergroup %}
                     </div>
                 </div>

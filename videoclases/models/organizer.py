@@ -6,7 +6,7 @@ from videoclases.models.school import School
 
 
 class Organizer(models.Model):
-    school = models.ForeignKey(School, on_delete=models.CASCADE)
+    school = models.ManyToManyField(School, blank=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     courses = models.ManyToManyField(Course, blank=True)
     changed_password = models.BooleanField(default=True)
@@ -21,8 +21,13 @@ class Organizer(models.Model):
         return ', '.join([
             u'{0} - {1}'.format(course.name, course.year)
             for course in self.courses.all()])
+    
+    def display_schools(self):
+        return self.school
+
 
     display_courses.short_description = 'Courses'
+    #display_schools.short_description = 'Schools'
     get_full_name.short_description = 'Name'
     get_full_name.admin_order_field = 'user__last_name'
     display_courses.admin_order_field = 'courses'

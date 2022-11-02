@@ -1,7 +1,7 @@
 ﻿{% extends 'base.html' %}
 {% load static %}
 
-{% block teacher-active %}class="menu-top-active"{% endblock %}
+{% block organizer-active %}class="menu-top-active"{% endblock %}
 
 {% block body-header-buttons %}
     <div class="col-xs-6">
@@ -9,10 +9,10 @@
             </button>
         </div>
     <div class="col-xs-6">
-            <button onclick="location.href = '{% url 'teacher' %}';" class="btn btn-info">Volver</button>
+            <button onclick="location.href = '{% url 'index' %}';" class="btn btn-info">Volver</button>
         </div>
 {% endblock %}
-{% block body-header-title %}Curso {{ course.name }}{% endblock %}
+{% block body-header-title %}Curso {{ course.name }} | {{ course.school.name }}{% endblock %}
 {% block body %}
     <div class="row">
         <div class="col-xs-12">

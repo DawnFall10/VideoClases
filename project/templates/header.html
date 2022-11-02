@@ -1,22 +1,84 @@
 {% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html>
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+{% block organizer-active %}class="menu-top-active"{% endblock %}
 
-    <title>Title</title>
-  </head>
- <body>
+{% block extra-head %}
+<script type="text/javascript">
+    function deleteTarea(homeworkId) {
+        if (confirm("¿Seguro que deseas borrar esta tarea?")) {
 
-    {% block content %}
+        }
+    }
+</script>
+{% endblock %}
 
-    {% endblock %} 
-      
-  </body>
+
+{% block body-header-buttons %}
+    <div class="col-xs-4">
+        <button onclick="location.href = '{% url 'new_course' %}';" class="btn btn-info">Crear curso
+        </button>
+    </div>
+    <div class="col-xs-4 ">
+        <button onclick="location.href = '{% url 'new_homework' %}';" class="btn btn-info">Crear
+            tarea
+        </button>
+    </div>
+    <div class="col-xs-4 ">
+        <button onclick="location.href = '{% url 'new_conceptual_test' %}';" class="btn btn-info">Crear
+            Test Conceptual
+        </button>
+    </div>
+{% endblock %}
+
+{% block body %}
+            <div>
+                <table id="example"  class="table table-responsive table-bordered" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Colegio</th>
+                            <th>Curso</th>
+                            <th>Profesor</th>
+                            <th>Tareas</th>
+                            <th>Estado de<br> tarea</th>
+                            <th>Test Conceptual </th>
+                            <th>VideoClases<br> subidas</th>
+                            <th>Fecha de<br> entrega</th>
+                            <th>Fecha de<br> evaluación</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for t in homeworks %}
+                            <tr>
+                                <td>{{ t.teacher.school }}</td>
+                                <td class="table-clickable" onclick="location.href = '{% url 'course_organizer' t.course.id %}';"><a>{{ t.course.name }}</a></td>
+                                <td>{{ t.teacher.user.get_full_name }}</td>
+                                <td class="table-clickable" onclick="location.href = '{% url 'videoclases_homework_organizer' t.id %}';"><a>{{ t.title }}</a></td>
+                                <td>{{ t.get_estado_nombre }}</td>
+                                {% if t.pedagogicalquestions %}
+                                <td  class="table-clickable" onclick="location.href = '{% url 'pedagogical_questions' t.pedagogicalquestions.id %}';">
+                                    <a>{{ t.pedagogicalquestions|truncatechars:15|default:'No posee test aún'}}</a></td>
+                                    {% else %}<td>No posee test aún</td>
+                                {% endif %}
+                                <td>{{ t.get_uploaded_videoclases }} / {{ t.groups.count }}</td>
+                                <td>{{ t.date_upload|date:'d-m-Y' }}</td>
+                                <td>{{ t.date_evaluation|date:'d-m-Y' }}</td>
+                                <td><form action="{% url 'delete_course' %}" method="post">
+                                        {% csrf_token %}
+                                        <input name="homework" style="display: none" value="{{t.id}}" />
+
+                                        <input type="submit" value="Borrar" class="btn btn-danger" onclick="deleteTarea({{t.id}})" />
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+{% endblock %}
+
+{% block extra-script %}
+{% include '_aux/teacher-table.html' %}
+{% endblock %}
 </html>
