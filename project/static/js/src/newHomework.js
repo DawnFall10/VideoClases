@@ -36,6 +36,7 @@ function ViewModel() {
     self.select = new Select();
     self.homework = {
         description: ko.observable(""),
+        organizer: ko.observable(),
         course: ko.observable(),
         previous_scales: ko.observable(),
         type_scales: ko.observable(),
@@ -80,6 +81,7 @@ function ViewModel() {
     self.submitNewHomeworkForm = function () {
         const fd = new FormData();
         fd.append("description", self.homework.description());
+        fd.append("organizer", self.homework.organizer());
         fd.append("course", self.homework.course());
         fd.append("revision", parseInt(self.homework.revision()));
         fd.append("title", self.homework.title());
@@ -90,15 +92,8 @@ function ViewModel() {
         }
         fd.append("scale",JSON.stringify({criteria: criteria_arr, scale: self.homework.type_scales()}));
         if (self.homework.homework_to_evaluate()) fd.append("homework_to_evaluate", self.homework.homework_to_evaluate());
-        const reggie = /(\d{2})\/(\d{2})\/(\d{4})/;
-        const uploadDateArr = reggie.exec(self.homework.date_upload());
-        const evaluationDateArr = reggie.exec(self.homework.date_evaluation());
-        const uploadDate = (+uploadDateArr[3]) + '-' + (+uploadDateArr[2]) + '-'
-            + (+uploadDateArr[1]);
-        const evaluationDate = (+evaluationDateArr[3]) + '-' + (+evaluationDateArr[2]) + '-'
-            + (+evaluationDateArr[1]);
-        fd.append("date_upload", uploadDate);
-        fd.append("date_evaluation", evaluationDate);
+        fd.append("date_upload", self.homework.date_upload());
+        fd.append("date_evaluation", self.homework.date_evaluation());
         $.ajaxSetup({
             beforeSend: function (xhr, settings) {
                 if (!csrfSafeMethod(settings.type) && !this.crossDomain) {

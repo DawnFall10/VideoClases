@@ -17,6 +17,15 @@
                     {% endif %}
                 {% endfor %}
             ];
+            self.organizer = [
+                {% for c in organizers %}
+                    {% if forloop.last %}
+                        {name: '{{ c }}', id: {{ c.id }}}
+                    {% else %}
+                        {name: '{{ c }}', id: {{ c.id }}},
+                    {% endif %}
+                {% endfor %}
+            ];
             self.homework_to_evaluate = [
                 {% for c in homeworks %}
                     {% if forloop.last %}
@@ -96,6 +105,17 @@
                         <textarea name="description" class="form-control" maxlength="400"
                                   data-bind="value: homework.description"></textarea>
                         <div class="row">
+                        <div class="col-xs-7">Organizador</div>
+                        <div class="col-xs-5">
+                            <select name="organizer" class="form-control  margin-top   " id="id_organizer"
+                                    data-bind="options: select.organizer,
+                                        optionsText: 'name',
+                                        optionsValue: 'id',
+                                        optionsCaption: '-- escoja un organizador --',
+                                        value: homework.organizer"></select>
+                        </div>
+                    </div>
+                        <div class="row">
                             <div class="col-xs-7">Curso</div>
                             <div class="col-xs-5">
                                 <select name="course" class="form-control  margin-top   " id="id_course"
@@ -117,7 +137,7 @@
                             <div class="col-xs-5">
                                 <div class="controls input-append date">
                                     <input class="form-control  margin-top" id="id_fecha_subida" name="date_upload" 
-                                           type="text" placeholder="yyyy-mm-dd" data-bind="value: homework.date_upload"/>
+                                           type="date" placeholder="yyyy-mm-dd" data-bind="value: homework.date_upload"/>
                                     <span class="add-on"><i class="icon-remove"></i></span>
                                     <span class="add-on"><i class="icon-th"></i></span>
                                 </div>
@@ -128,7 +148,7 @@
                             <div class="col-xs-5">
                                 <div class="controls input-append date">
                                     <input class="form-control  margin-top" id="id_fecha_evaluacion" name="date_evaluation"
-                                            type="text" placeholder="yyyy-mm-dd" data-bind="value: homework.date_evaluation"/>
+                                            type="date" placeholder="yyyy-mm-dd" data-bind="value: homework.date_evaluation"/>
                                     <span class="add-on"><i class="icon-remove"></i></span>
                                     <span class="add-on"><i class="icon-th"></i></span>
                                 </div>
@@ -197,10 +217,7 @@
                     <div  class="col-md-8" data-bind="foreach: { data: criteria, as: 'c' }">
                         <div class="row" >
                                         <div class="col-md-3">
-                                            <span data-bind="text: $index()+1"></span>
-                                            <button data-bind="click: $parent.removeCriteria" class="btn  btn-md btn-danger">
-                                                <i class="fa fa-remove"></i> Borrar
-                                            </button>
+                                        
                                         </div>
                                         <div class="col-md-9">
                                             <input type="text" class="form-control margin-top name-criteria" data-bind="value: c.name, attr:{name: 'name_'+$index}" placeholder="Nombre del criterio (Requerido)" required/>

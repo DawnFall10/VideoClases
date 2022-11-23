@@ -48,6 +48,7 @@ from videoclases.models.student import Student
 from videoclases.models.student_evaluations import StudentEvaluations
 from videoclases.models.student_responses import StudentResponses
 from videoclases.models.video_clase import VideoClase
+from videoclases.models.organizer import Organizer
 
 SHOW_CORRECT_ANSWER = 'Mostrar alternativa correcta'
 
@@ -426,6 +427,7 @@ class NewHomeworkView(TemplateView):
         context['new_homework_form'] = form
         teacher = self.request.user.teacher
         context['courses'] = teacher.courses.filter(year=timezone.now().year)
+        context['organizers'] = Organizer.objects.all()
         context['type_scales'] = Scale.objects.all()
         context['homeworks'] = Homework.objects.filter(course__in=context['courses'])
         return context

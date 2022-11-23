@@ -150,7 +150,7 @@ class NewCourseUploadFileForm(forms.Form):
 class NewHomeworkForm(forms.ModelForm):
     class Meta:
         model = Homework
-        fields = ['video', 'title', 'description', 'course', 'revision',
+        fields = ['video', 'title', 'description', 'organizer' ,'course', 'revision',
                   'date_upload', 'date_evaluation','homework_to_evaluate']
         dateOptions = {
             'weekStart': 1,
