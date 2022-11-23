@@ -560,7 +560,7 @@ def download_course(request, course_id):
     return JsonResponse(result_dict)
 
 
-@user_passes_test(in_teachers_group, login_url='/')
+#@user_passes_test(in_teachers_group, login_url='/')
 def download_homework_groups(request, homework_id):
     result_dict = {}
     homework = get_object_or_404(Homework, pk=homework_id)
@@ -639,7 +639,7 @@ class EditGroupFormView(FormView):
     template_name = 'blank.html'
     form_class = AssignGroupForm
 
-    @method_decorator(user_passes_test(in_teachers_group, login_url='/'))
+    #@method_decorator(user_passes_test(in_teachers_group, login_url='/'))
     def dispatch(self, *args, **kwargs):
         return super(EditGroupFormView, self).dispatch(*args, **kwargs)
 
@@ -841,6 +841,73 @@ class EditHomeworkView(UpdateView):
         obj = get_object_or_404(self.model, pk=self.kwargs['homework_id'])
         return obj
 
+
+class EditHomeworkOrganizerView(UpdateView):
+    template_name = 'edit-homework-organizer.html'
+    form_class = EditHomeworkForm
+    success_url = reverse_lazy('organizer')
+    model = Homework
+
+    @method_decorator(user_passes_test(in_organizer_group, login_url='/'))
+    def dispatch(self, *args, **kwargs):
+        return super(EditHomeworkOrganizerView, self).dispatch(*args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(EditHomeworkOrganizerView, self).get_context_data(**kwargs)
+        homework = Homework.objects.get(id=self.kwargs['homework_id'])
+        context['courses'] = self.request.user.organizer.courses.filter(year=timezone.now().year)
+        context['homework'] = homework
+        context['types_scales'] = Scale.objects.all()
+        context['homeworks'] = Homework.objects.filter(course__in=context['courses']).exclude(id=homework.id)
+        context['videoclases_recibidas'] = GroupOfStudents.objects.filter(homework=homework) \
+            .exclude(videoclase__video__isnull=True) \
+            .exclude(videoclase__video__exact='').count()
+        return context
+
+    def form_valid(self, form):
+        self.object = self.get_object()
+        self.object = form.save()
+
+        criteria = self.request.POST.get('criteria', None)
+        homework = Homework.objects.get(id=self.kwargs['homework_id'])
+        teacher = homework.teacher
+        if criteria:
+            try:
+                criteria = json.loads(criteria)
+                groups_criteria = self.object.criteria.filter(teacher=teacher)
+                if len(criteria) >0:
+                    if groups_criteria.count() == 0:
+                        model = CriteriaByTeacher.objects.create(teacher=teacher, name=self.object.full_name())
+                        model.save()
+                        filtered_criteria = [item for item in criteria if item.get('editable',None) and not item.get('id', None)]
+                        for c in filtered_criteria:
+                            model.criteria.create(value=c.get("name"), description=c.get('description', ""))
+                        self.object.criteria.add(model)
+                    else:
+                        group = groups_criteria[0]
+                        for c in criteria:
+                            id = c.get('id', None)
+                            editable = c.get('editable', False)
+                            if id and editable:
+                                original = group.criteria.filter(id=id)[0]
+                                if c.get('deleted', False):
+                                    original.delete()
+                                else:
+                                    original.value = c.get('name')
+                                    original.description = c.get('description',"")
+                                    original.save()
+                            elif not id and editable:
+                                group.criteria.create(value=c.get("name"), description=c.get('description', ""))
+
+            except JSONDecodeError:
+                pass
+        result_dict = dict()
+        result_dict['id'] = self.object.id
+        return JsonResponse(result_dict)
+
+    def get_object(self):
+        obj = get_object_or_404(self.model, pk=self.kwargs['homework_id'])
+        return obj
 
 class SendVideoclaseView(UpdateView):
     template_name = 'send-videoclase.html'
