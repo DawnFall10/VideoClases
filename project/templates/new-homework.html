@@ -217,7 +217,9 @@
                     <div  class="col-md-8" data-bind="foreach: { data: criteria, as: 'c' }">
                         <div class="row" >
                                         <div class="col-md-3">
-                                        
+                                            <div class="col-md-3">
+                                                <span data-bind="text: $index()+1"></span>
+                                            </div>
                                         </div>
                                         <div class="col-md-9">
                                             <input type="text" class="form-control margin-top name-criteria" data-bind="value: c.name, attr:{name: 'name_'+$index}" placeholder="Nombre del criterio (Requerido)" required/>

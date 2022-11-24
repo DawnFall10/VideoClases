@@ -460,20 +460,20 @@ class NewHomeworkFormView(FormView):
 
     def form_valid(self, form):
         result_dict = {}
-        scala = self.request.POST.get("scala", None)
+        scale = self.request.POST.get('scale', None)
         teacher = self.request.user.teacher
         homework = form.save(commit=False)
         homework.teacher = teacher
         homework.save()
-        if scala:
+        if scale:
             try:
-                scala = json.loads(scala)
+                scale = json.loads(scale)
                 model = CriteriaByTeacher.objects.create(teacher=teacher, name=homework.full_name())
                 model.save()
-                for c in scala.get('criteria'):
+                for c in scale.get('criteria'):
                     print(c)
                     model.criteria.create(value=c.get("name"), description=c.get('description', ""))
-                homework.scala = Scale.objects.get(id=scala.get("scala"))
+                homework.scale = Scale.objects.get(id=scale.get("scale"))
                 homework.criteria.add(model)
                 homework.save()
             except JSONDecodeError as e:

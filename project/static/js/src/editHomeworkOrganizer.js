@@ -148,20 +148,7 @@ function ViewModel() {
         var isValue = value !== undefined && value !== false;
         var isTarget = target !== undefined && target !== false;
         if (isValue && isTarget) {
-            var reggie = /(\d{2})\/(\d{2})\/(\d{4})/;
-            var valueArray = reggie.exec(value); 
-            var targetArray = reggie.exec(target);
-            var valueDate = new Date(
-                parseInt((+valueArray[3])),
-                parseInt((+valueArray[2]))-1,
-                parseInt((+valueArray[1]))
-            );
-            var targetDate = new Date(
-                parseInt((+targetArray[3])),
-                parseInt((+targetArray[2]))-1,
-                parseInt((+targetArray[1]))
-            );
-            return valueDate > targetDate;
+            return value > target;
         }
         return false;
     };
@@ -246,20 +233,11 @@ function ViewModel() {
             }
 
             //end criteria
-
-            var reggie = /(\d{2})\/(\d{2})\/(\d{4})/;
-            var subidaArray = reggie.exec(self.homework.date_upload());
-            var subidaDate = (+subidaArray[3]) + '-' + (+subidaArray[2]) + '-'
-                +(+subidaArray[1]);
-            fd.append("date_upload", subidaDate);
+            fd.append("date_upload", self.homework.date_upload());
             if (self.homework.date_upload().localeCompare(self.homeworkInitialData.date_upload()) !== 0) {
                 mustSubmit = true;
             }
-
-            var evaluacionArray = reggie.exec(self.homework.date_evaluation());
-            var evaluacionDate = (+evaluacionArray[3]) + '-' + (+evaluacionArray[2]) + '-'
-                +(+evaluacionArray[1]);
-            fd.append("date_evaluation", evaluacionDate);
+            fd.append("date_evaluation", self.homework.date_evaluation());
 
             if (self.homework.date_evaluation().localeCompare(self.homeworkInitialData.date_evaluation()) !== 0) {
                 mustSubmit = true;

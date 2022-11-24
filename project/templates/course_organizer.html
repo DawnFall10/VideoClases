@@ -5,11 +5,7 @@
 
 {% block body-header-buttons %}
     <div class="col-xs-6">
-            <button onclick="location.href = '{% url 'edit_course' course.id %}';" class="btn btn-info">Editar Curso
-            </button>
-        </div>
-    <div class="col-xs-6">
-            <button onclick="location.href = '{% url 'index' %}';" class="btn btn-info">Volver</button>
+            <button onclick="location.href = '{% url 'organizer' %}';" class="btn btn-info">Volver</button>
         </div>
 {% endblock %}
 {% block body-header-title %}Curso {{ course.name }} | {{ course.school.name }}{% endblock %}

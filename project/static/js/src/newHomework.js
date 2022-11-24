@@ -81,7 +81,7 @@ function ViewModel() {
     self.submitNewHomeworkForm = function () {
         const fd = new FormData();
         fd.append("description", self.homework.description());
-        fd.append("organizer", self.homework.organizer());
+        if (self.homework.organizer()) fd.append("organizer", self.homework.organizer());
         fd.append("course", self.homework.course());
         fd.append("revision", parseInt(self.homework.revision()));
         fd.append("title", self.homework.title());
@@ -135,6 +135,11 @@ function ViewModel() {
     };
 
     self.onSelectChangeValue = function (value) {
+        let criteria_arr = [];
+        for(let c of self.criteria()){
+            criteria_arr.push({name:c.name(),description: c.description()});
+        }
+        console.log(JSON.stringify({criteria: criteria_arr, scale: self.homework.type_scales()}))
         $.when($.ajax("/teacher/download-course/" + value + "/")).done(
             function (result) {
                 self.assignGroups.students.removeAll();

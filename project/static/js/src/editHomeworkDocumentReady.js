@@ -7,20 +7,7 @@ $(document).ready(function() {
             var isValue = value !== undefined && value !== false;
             var isTarget = target !== undefined && target !== false;
             if (isValue && isTarget) {
-                var reggie = /(\d{2})\/(\d{2})\/(\d{4})/;
-                var valueArray = reggie.exec(value); 
-                var targetArray = reggie.exec(target);
-                var valueDate = new Date(
-                    parseInt((+valueArray[3])),
-                    parseInt((+valueArray[2]))-1,
-                    parseInt((+valueArray[1]))
-                );
-                var targetDate = new Date(
-                    parseInt((+targetArray[3])),
-                    parseInt((+targetArray[2]))-1,
-                    parseInt((+targetArray[1]))
-                );
-                return valueDate > targetDate;
+                return value > target;
             }
             return false;
         },
