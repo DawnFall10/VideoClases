@@ -75,7 +75,7 @@ USE_TZ = True
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 # Allow all host headers
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["www.videoclasesv2.com", "videoclasesv2.com", "119.8.151.56"]
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
@@ -96,7 +96,7 @@ FIXTURE_DIRS = [
 # STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 AUTHENTICATION_BACKENDS = ("django.contrib.auth.backends.ModelBackend",)
-LOGIN_REDIRECT_URL = "~gsilva/"
+#LOGIN_REDIRECT_URL = "~gsilva/"
 
 CRISPY_TEMPLATE_PACK = "bootstrap3"
 
