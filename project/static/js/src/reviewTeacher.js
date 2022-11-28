@@ -57,7 +57,7 @@ function ViewModel() {
                     alert("Completaste todas las evaluaciones de esta tarea");
                     location.href = url_back;
                 }else{
-                    self.responseValues.ohterChoices(response.ohterChoices);
+                    self.responseValues.otherChoices(response.otherChoices);
                     self.responseValues.correctAnswer(response.correctAnswer);
                     self.responseValues.video(response.video);
                     self.responseValues.question(response.question);

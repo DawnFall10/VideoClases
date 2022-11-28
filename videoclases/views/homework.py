@@ -93,12 +93,12 @@ class HomeworkEvaluationsTeacherView(DetailView):
             item.comments = request.POST.get('comments', None)
             item.save()
             for c in criteria:
-                score = item.score_check.filter(criteria__id=c['criterion'])
+                score = item.score_check.filter(criteria__id=c['criteria'])
                 if score.count() > 0:
                     score = score[0]
                 else:
                     score = QualityScore.objects.create(
-                        criteria=Criterion.objects.get(id=c['criterion']),
+                        criteria=Criterion.objects.get(id=c['criteria']),
                         teacher=request.user.teacher
                     )
                     score.save()
