@@ -306,9 +306,7 @@
                         <div class="row">
                             <div class="col-md-3">
                                 <span data-bind="text: $index()+1"></span>
-                                <button data-bind="click: $parent.removeCriteria, visible: $root.editHomeworkBool() && c.editable" class="btn  btn-md btn-danger">
-                                    <i class="fa fa-remove"></i> Borrar
-                                </button>
+
                             </div>
                             <div class="col-md-9" data-bind="visible: $root.editHomeworkBool()">
                                 <input type="text" class="form-control margin-top name-criteria" data-bind="value: c.name, enable: c.editable, attr:{name: 'name_'+$index}" placeholder="Nombre del criterio (Requerido)" required/>
