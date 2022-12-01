@@ -857,7 +857,7 @@ class EditHomeworkOrganizerView(UpdateView):
     def get_context_data(self, **kwargs):
         context = super(EditHomeworkOrganizerView, self).get_context_data(**kwargs)
         homework = Homework.objects.get(id=self.kwargs['homework_id'])
-        context['courses'] = self.request.user.organizer.courses.filter(year=timezone.now().year)
+        context['courses'] = self.request.user.organizer.courses.all()
         context['homework'] = homework
         context['types_scales'] = Scale.objects.all()
         context['homeworks'] = Homework.objects.filter(course__in=context['courses']).exclude(id=homework.id)
