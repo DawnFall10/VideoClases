@@ -14,6 +14,9 @@ urlpatterns = [
     path('organizer/videoclases_homework_organizer/(?P<homework_id>\d+)/',vv.VideoclasesHomeworkOrganizerView.as_view(), name='videoclases_homework_organizer'),
     path('organizer/homework/<int:homework_id>/', vv.EditHomeworkOrganizerView.as_view(), name='homework_organizer'),
     path('organizer/edit-homework-form/<int:homework_id>/', vv.EditHomeworkOrganizerView.as_view(), name='edit_homework_organizer_form'),
+    path('organizer/homework-evaluations/<int:pk>/',
+        hw.HomeworkEvaluationsOrganizerView.as_view(),
+        name='homework_evaluations_organizer'),
 
     path("password_reset", vv.password_reset_request, name="password_reset"),
     path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(template_name='password_reset_done.html'), name='password_reset_done'),
