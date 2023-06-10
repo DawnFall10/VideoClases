@@ -128,12 +128,12 @@ class GetVideoClaseTeacherView(DetailView):
         context = super(GetVideoClaseTeacherView, self).get_context_data(**kwargs)
         return context
 
-    @method_decorator(user_passes_test(in_teachers_group, login_url='/'))
+    #@method_decorator(user_passes_test(in_teachers_group, login_url='/'))
     def dispatch(self, *args, **kwargs):
         return super(GetVideoClaseTeacherView, self).dispatch(*args, **kwargs)
 
 
-@user_passes_test(in_teachers_group, login_url='/')
+#@user_passes_test(in_teachers_group, login_url='/')
 def descargar_homework_evaluation(request, homework_id):
     homework = get_object_or_404(Homework, pk=homework_id)
     api = APIHomework(homework_id)
@@ -142,7 +142,7 @@ def descargar_homework_evaluation(request, homework_id):
 
     try:
         control = QualityControl.objects.get(homework=homework)
-        teacher_evaluations = control.list_items.filter(teacher=request.user.teacher).count()
+        teacher_evaluations = control.list_items.filter(teacher=homework.teacher).count()
     except QualityControl.DoesNotExist:
         pass
 
@@ -155,7 +155,7 @@ def descargar_homework_evaluation(request, homework_id):
     return JsonResponse(results, safe=False)
 
 
-@user_passes_test(in_teachers_group, login_url='/')
+#@user_passes_test(in_teachers_group, login_url='/')
 def descargar_teacher_evaluations(request, homework_id):
     api = APIHomework(homework_id)
     return JsonResponse(api.get_teacher_evaluations(), safe=False)

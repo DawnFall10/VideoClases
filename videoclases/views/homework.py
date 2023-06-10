@@ -27,16 +27,28 @@ class HomeworkEvaluationsView(DetailView):
         context = super(HomeworkEvaluationsView, self).get_context_data(**kwargs)
         return context
 
-    @method_decorator(user_passes_test(in_teachers_group, login_url='/'))
+    #@method_decorator(user_passes_test(in_teachers_group, login_url='/'))
     def dispatch(self, *args, **kwargs):
         return super(HomeworkEvaluationsView, self).dispatch(*args, **kwargs)
+
+class HomeworkEvaluationsOrganizerView(DetailView):
+    template_name = 'homework_notes_organizer.html'
+    model = Homework
+
+    def get_context_data(self, **kwargs):
+        context = super(HomeworkEvaluationsOrganizerView, self).get_context_data(**kwargs)
+        return context
+
+    #@method_decorator(user_passes_test(in_teachers_group, login_url='/'))
+    def dispatch(self, *args, **kwargs):
+        return super(HomeworkEvaluationsOrganizerView, self).dispatch(*args, **kwargs)
 
 
 class HomeworkEvaluationsTeacherView(DetailView):
     template_name = 'homework_teacher_evaluation.html'
     model = Homework
 
-    @method_decorator(user_passes_test(in_teachers_group, login_url='/'))
+    #@method_decorator(user_passes_test(in_teachers_group, login_url='/'))
     def dispatch(self, *args, **kwargs):
         return super(HomeworkEvaluationsTeacherView, self).dispatch(*args, **kwargs)
 
